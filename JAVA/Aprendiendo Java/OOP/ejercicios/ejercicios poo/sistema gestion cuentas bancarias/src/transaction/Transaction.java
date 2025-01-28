@@ -4,12 +4,12 @@ import account.Account;
 import account.CurrencyOptions;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Transaction {
-
     private final TransactionType type;
     private CurrencyOptions currency;
-    private final String id;
+    private String uuid;
     private double amount;
     private Account sourceAccount;
     private Account destinationAccount;
@@ -17,29 +17,29 @@ public class Transaction {
 
 
     // constructor for normal transaction
-    public Transaction(String id, double amount, Account sourceAccount, Account destinationAccount, String sourceAccountId, String destinationAccountId, LocalDateTime timestamp, TransactionType type) {
+    public Transaction(double amount, Account sourceAccount, Account destinationAccount, TransactionType type, CurrencyOptions currency) {
         if (amount <=0) throw new IllegalArgumentException("Invalid Amount");
         if (currency == null) throw new IllegalArgumentException("Currency cannot be null.");
-        this.id = id;
+        this.uuid = UUID.randomUUID().toString();
         this.amount = amount;
         this.sourceAccount = sourceAccount;
         this.destinationAccount = destinationAccount;
-        this.timestamp = (timestamp != null) ? timestamp : LocalDateTime.now();
+        this.timestamp = LocalDateTime.now();
         this.type = type;
         this.currency = currency;
     }
 
     //overload to transactions without destination like deposit/withrawal
-    public Transaction(String id, TransactionType type, double amount, Account sourceAccount, CurrencyOptions currency) {
+    public Transaction(TransactionType type, double amount, Account sourceAccount, CurrencyOptions currency) {
         if (amount <= 0) throw new IllegalArgumentException("Invalid Amount");
         if (type == TransactionType.TRANSFER) {
             throw new IllegalArgumentException("Transfer transactions require a destination account.");
         }
         if (currency == null) throw new IllegalArgumentException("Currency cannot be null.");
-        this.id = id;
+        this.uuid = UUID.randomUUID().toString();
         this.type = type;
         this.amount = amount;
-        this.timestamp = (timestamp != null) ? timestamp : LocalDateTime.now();
+        this.timestamp = LocalDateTime.now();
         this.sourceAccount = sourceAccount;
         this.destinationAccount = null;
         this.currency = currency;
@@ -51,6 +51,9 @@ public class Transaction {
         return timestamp;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
 
     public Account getDestinationAccount() {
         return destinationAccount;
@@ -79,30 +82,33 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getId() {
-        return id;
-    }
 
+    public void transfer
 
+    //Show transaction details
     public void displayTransactionDetails(){
-        System.out.println("ID: " + id);
+        System.out.println("ID: " + uuid);
         System.out.println("Type: " + type);
         System.out.println("Amount: " + amount + " " + currency);
         System.out.println("Date : " + timestamp);
 
         switch (type) {
             case DEPOSIT:
-                System.out.println("Deposit to account: " + );
+                if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+                System.out.println("Deposited to account: " + (destinationAccount != null ? destinationAccount : "N/A"));
                 break;
-
             case WITHDRAWAL:
-                System.out.println("Withdrawal from account: " + );
+                if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+                System.out.println("Withdrawal from account: " + (sourceAccount != null ? sourceAccount : "N/A"));
                 break;
-
             case TRANSFER:
-                System.out.println("Transfer from " +  + " to " + );
-                break;
+                if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+                //business rule3. "Transfers can only occur between accounts with the same currency."
+                if (sourceAccount.getCurrency() != destinationAccount.getCurrency()) throw new IllegalArgumentException("Transfers can only occur between accounts with the same currency.");
 
+                System.out.println("Transfer from " + (sourceAccount != null ? sourceAccount : "N/A") +
+                        " to " + (destinationAccount != null ? destinationAccount : "N/A"));
+                break;
             default:
                 System.out.println("Unknown transaction type");
         }

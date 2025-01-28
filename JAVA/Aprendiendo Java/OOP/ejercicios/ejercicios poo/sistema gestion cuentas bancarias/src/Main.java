@@ -9,7 +9,7 @@ import static account.CurrencyOptions.*;
 public class Main {
     public static void main(String[] args) {
         SavingsAccount cuenta = new SavingsAccount("1234", "Freddy", 14575.9, USD, 0.05);
-        Transaction transaction =  new Transaction();
+//        Transaction transaction =  new Transaction();
 
 
     }

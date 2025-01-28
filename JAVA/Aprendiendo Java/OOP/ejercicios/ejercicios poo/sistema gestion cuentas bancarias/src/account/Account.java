@@ -1,5 +1,7 @@
 package account;
 
+import java.util.UUID;
+
 public abstract class  Account {
 
     private final CurrencyOptions currency; //USD, EUR, COP, ETC.
@@ -8,13 +10,14 @@ public abstract class  Account {
     private double balance; //current account balance
 
     public Account(String accountNumber, String accountHolder, double balance, CurrencyOptions currency) {
-        this.accountNumber = accountNumber;
+        this.accountNumber = UUID.randomUUID().toString();
         this.accountHolder = accountHolder;
         this.balance = balance;
         this.currency = currency;
     }
 
     protected void addToBalance(double amount){
+        if (amount <0) throw new IllegalArgumentException("Amount should be positive);
         this.balance += amount;
     }
 
