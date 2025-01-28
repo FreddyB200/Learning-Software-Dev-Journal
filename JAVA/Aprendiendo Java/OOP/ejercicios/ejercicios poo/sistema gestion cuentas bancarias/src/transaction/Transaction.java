@@ -1,6 +1,7 @@
 package transaction;
 
 import account.Account;
+import account.CheckingAccount;
 import account.CurrencyOptions;
 
 import java.time.LocalDateTime;
@@ -29,22 +30,6 @@ public class Transaction {
         this.currency = currency;
     }
 
-    //overload to transactions without destination like deposit/withrawal
-    public Transaction(TransactionType type, double amount, Account sourceAccount, CurrencyOptions currency) {
-        if (amount <= 0) throw new IllegalArgumentException("Invalid Amount");
-        if (type == TransactionType.TRANSFER) {
-            throw new IllegalArgumentException("Transfer transactions require a destination account.");
-        }
-        if (currency == null) throw new IllegalArgumentException("Currency cannot be null.");
-        this.uuid = UUID.randomUUID().toString();
-        this.type = type;
-        this.amount = amount;
-        this.timestamp = LocalDateTime.now();
-        this.sourceAccount = sourceAccount;
-        this.destinationAccount = null;
-        this.currency = currency;
-
-    }
 
     //getters and setters
     public LocalDateTime getTimestamp() {
@@ -83,7 +68,42 @@ public class Transaction {
     }
 
 
-    public void transfer
+    public void withdraw(Account sourceAccount, double amount) {
+        if (this.type != TransactionType.WITHDRAWAL){
+            throw new IllegalStateException("No se puede realizar un retiro en una transacción que no es de tipo WITHDRAWAL");
+        }
+
+        if (!(sourceAccount instanceof CheckingAccount)){
+            throw new IllegalArgumentException("Error. Solo se pueden hacer retiros desde una cuenta Checking.");
+        }
+
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Error. The withdraw must be positive.");
+        }
+        CheckingAccount checkingAccount = (CheckingAccount) sourceAccount; // Downcast seguro
+        double balance = checkingAccount.getBalance();
+        double overdraftLimit = checkingAccount.getOverdraftLimit(); // Obtener el límite de sobregiro
+
+        // Verificar que el retiro no exceda el límite de sobregiro
+        if ((balance - amount) < -overdraftLimit) {
+            throw new IllegalArgumentException("Error. Insufficient funds. Overdraft limit exceeded.");
+        }
+        checkingAccount.withdraw(amount);
+    }
+
+
+    public void deposit(Account sourceAccount, double amount) {
+        if (amount > 0) {
+          sourceAccount.getBalance()  += amount;
+        } else {
+            throw new IllegalArgumentException("Amount should be positive.");
+        }
+    }
+
+    public void transfer(Account sourceAccount, Account destinationAccount, double amount, TransactionType type){
+        if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
+        if (sourceAccount.getCurrency() != destinationAccount.getCurrency()) throw new IllegalArgumentException("Transfers can only occur between accounts with the same currency.");
+    }
 
     //Show transaction details
     public void displayTransactionDetails(){
@@ -94,18 +114,12 @@ public class Transaction {
 
         switch (type) {
             case DEPOSIT:
-                if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
                 System.out.println("Deposited to account: " + (destinationAccount != null ? destinationAccount : "N/A"));
                 break;
             case WITHDRAWAL:
-                if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
                 System.out.println("Withdrawal from account: " + (sourceAccount != null ? sourceAccount : "N/A"));
                 break;
             case TRANSFER:
-                if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
-                //business rule3. "Transfers can only occur between accounts with the same currency."
-                if (sourceAccount.getCurrency() != destinationAccount.getCurrency()) throw new IllegalArgumentException("Transfers can only occur between accounts with the same currency.");
-
                 System.out.println("Transfer from " + (sourceAccount != null ? sourceAccount : "N/A") +
                         " to " + (destinationAccount != null ? destinationAccount : "N/A"));
                 break;
