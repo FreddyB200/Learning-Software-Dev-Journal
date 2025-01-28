@@ -20,5 +20,32 @@ public class UserManager {
     public List<User> getUsers(){
         return new ArrayList<>(users);
     }
+
+    public void displayUsers(){
+        if (users.isEmpty()){
+            System.out.println("No users registered");
+            return;
+        }
+        System.out.println("Users list!");
+        for (User user : users){
+            user.displayInfo();
+            System.out.println("-------------------");
+        }
+    }
+
+    public User findUserByID(int id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public int getSize(){
+        return users.size();
+    }
+
+
 }
 
