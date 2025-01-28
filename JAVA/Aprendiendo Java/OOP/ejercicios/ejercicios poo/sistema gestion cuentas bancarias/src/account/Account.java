@@ -1,12 +1,13 @@
 package account;
 
 public abstract class  Account {
+
+    private final CurrencyOptions currency; //USD, EUR, COP, ETC.
     private String accountNumber;
     private String accountHolder;
     private double balance; //current account balance
-    private String currency; //USD, EUR, COP, ETC.
 
-    public Account(String accountNumber, String accountHolder, double balance, String currency) {
+    public Account(String accountNumber, String accountHolder, double balance, CurrencyOptions currency) {
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
         this.balance = balance;
@@ -23,6 +24,11 @@ public abstract class  Account {
 
     protected void setBalance(double balance) {
         this.balance = balance;
+    }
+
+
+    public CurrencyOptions getCurrency() {
+        return currency;
     }
 
     public void deposit(double amount){
@@ -44,6 +50,5 @@ public abstract class  Account {
     public void checkBalance(){
         System.out.println("The current balanace is: " + balance);
     }
-
 
 }
