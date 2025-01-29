@@ -19,6 +19,14 @@ public class Transaction {
     private LocalDateTime timestamp;
 
 
+    public Transaction(TransactionType type, double amount, Account sourceAccount) {
+        this.uuid = UUID.randomUUID().toString();
+        this.type = type;
+        this.amount = amount;
+        this.timestamp = LocalDateTime.now();
+        this.sourceAccount = sourceAccount;
+    }
+
     // constructor for normal transaction
     public Transaction(double amount, Account sourceAccount, Account destinationAccount, TransactionType type, CurrencyOptions currency) {
         if (amount <=0) throw new IllegalArgumentException("Invalid Amount");
@@ -111,7 +119,7 @@ public class Transaction {
 
 
 
-    public void transfer(Account sourceAccount, Account destinationAccount, double amount, TransactionType type){
+    public void transfer(Account sourceAccount, Account destinationAccount, double amount){
         if (type != TransactionType.TRANSFER){
             throw new IllegalStateException("Invalid transaction type. This method is only for transfers.");
         }
@@ -142,6 +150,7 @@ public class Transaction {
 
         System.out.println("Transfer successful: " + amount + " " + sourceAccount.getCurrency() +
                 " from " + sourceAccount + " to " + destinationAccount);
+
     }
 
     //Show transaction details
