@@ -1,8 +1,10 @@
 package transaction;
+import java.text.SimpleDateFormat;
 
 import account.Account;
 import account.CheckingAccount;
 import account.CurrencyOptions;
+import account.SavingsAccount;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -84,7 +86,6 @@ public class Transaction {
         double balance = checkingAccount.getBalance();
         double overdraftLimit = checkingAccount.getOverdraftLimit(); // Obtener el límite de sobregiro
 
-        // Verificar que el retiro no exceda el límite de sobregiro
         if ((balance - amount) < -overdraftLimit) {
             throw new IllegalArgumentException("Error. Insufficient funds. Overdraft limit exceeded.");
         }
@@ -92,41 +93,104 @@ public class Transaction {
     }
 
 
-    public void deposit(Account sourceAccount, double amount) {
-        if (amount > 0) {
-          sourceAccount.getBalance()  += amount;
-        } else {
-            throw new IllegalArgumentException("Amount should be positive.");
+    public void deposit(Account destinationAccount, double amount) {
+        if (this.type != TransactionType.DEPOSIT) {
+            throw new IllegalStateException("No se puede realizar un depósito en una transacción que no es de tipo DEPOSIT");
         }
+
+        if (!(destinationAccount instanceof SavingsAccount)) {
+            throw new IllegalArgumentException("Error. Solo se pueden hacer depósitos en cuentas de ahorro (SavingsAccount).");
+        }
+
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Error. The deposit amount must be positive.");
+        }
+
+        destinationAccount.deposit(amount);
     }
 
+
+
     public void transfer(Account sourceAccount, Account destinationAccount, double amount, TransactionType type){
-        if (amount < 0) throw new IllegalArgumentException("amount cannot be negative");
-        if (sourceAccount.getCurrency() != destinationAccount.getCurrency()) throw new IllegalArgumentException("Transfers can only occur between accounts with the same currency.");
+        if (type != TransactionType.TRANSFER){
+            throw new IllegalStateException("Invalid transaction type. This method is only for transfers.");
+        }
+
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive.");
+        }
+
+        if (sourceAccount == null || destinationAccount == null){
+            throw new IllegalArgumentException("Both source and destination accounts must be provided.");
+        }
+
+        if (sourceAccount == destinationAccount) {
+            throw new IllegalArgumentException("Cannot transfer to the same account.");
+        }
+
+        if (!sourceAccount.getCurrency().equals(destinationAccount.getCurrency())){
+            throw new IllegalArgumentException("Transfers can only occur between accounts with the same currency.");
+        }
+
+        if (sourceAccount.getBalance() < amount) {
+            throw new IllegalArgumentException("Insufficient funds for transfer.");
+        }
+
+        //realice transaction
+        sourceAccount.withdraw(amount);
+        destinationAccount.deposit(amount);
+
+        System.out.println("Transfer successful: " + amount + " " + sourceAccount.getCurrency() +
+                " from " + sourceAccount + " to " + destinationAccount);
     }
 
     //Show transaction details
-    public void displayTransactionDetails(){
-        System.out.println("ID: " + uuid);
-        System.out.println("Type: " + type);
-        System.out.println("Amount: " + amount + " " + currency);
-        System.out.println("Date : " + timestamp);
+    public void displayTransactionDetails() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        System.out.println("Transaction Details:");
+        System.out.println("ID: " + (uuid != null ? uuid : "N/A"));
+        System.out.println("Type: " + (type != null ? type : "N/A"));
+        System.out.println("Amount: " + amount + " " + (currency != null ? currency : "N/A"));
+        System.out.println("Date: " + (timestamp != null ? dateFormat.format(timestamp) : "N/A"));
 
         switch (type) {
             case DEPOSIT:
-                System.out.println("Deposited to account: " + (destinationAccount != null ? destinationAccount : "N/A"));
+                if (destinationAccount instanceof SavingsAccount) {
+                    System.out.println("Deposited to Savings Account: " + destinationAccount);
+                } else {
+                    System.out.println("Error: Deposits can only be made to a Savings Account.");
+                }
                 break;
+
             case WITHDRAWAL:
-                System.out.println("Withdrawal from account: " + (sourceAccount != null ? sourceAccount : "N/A"));
+                if (sourceAccount instanceof CheckingAccount) {
+                    System.out.println("Withdrawal from Checking Account: " + sourceAccount);
+                } else {
+                    System.out.println("Error: Withdrawals can only be made from a Checking Account.");
+                }
                 break;
+
             case TRANSFER:
-                System.out.println("Transfer from " + (sourceAccount != null ? sourceAccount : "N/A") +
-                        " to " + (destinationAccount != null ? destinationAccount : "N/A"));
+                if (sourceAccount == null || destinationAccount == null) {
+                    System.out.println("Error: Both source and destination accounts must be provided.");
+                    break;
+                }
+                if (sourceAccount == destinationAccount) {
+                    System.out.println("Error: Cannot transfer to the same account.");
+                    break;
+                }
+                if (!sourceAccount.getCurrency().equals(destinationAccount.getCurrency())) {
+                    System.out.println("Error: Transfers can only occur between accounts with the same currency.");
+                    break;
+                }
+                System.out.println("Transfer from " + sourceAccount + " to " + destinationAccount);
                 break;
+
             default:
                 System.out.println("Unknown transaction type");
         }
-
     }
+
 
 }

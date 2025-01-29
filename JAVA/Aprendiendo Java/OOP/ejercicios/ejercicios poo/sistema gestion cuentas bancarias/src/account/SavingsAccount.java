@@ -12,8 +12,16 @@ public class SavingsAccount extends Account{
     }
 
     @Override
-    public void deposit(double amount){
-        
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a depositar debe ser positivo.");
+        }
+        this.balance += amount;
+    }
+
+    @Override
+    public void withdraw(double amount){
+        this.balance -= amount;
     }
 
 
@@ -26,7 +34,7 @@ public class SavingsAccount extends Account{
         } else {
             throw new IllegalArgumentException("Interest rate cannot be negative.");
         }
-        }
+    }
 
 
 }
