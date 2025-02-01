@@ -3,14 +3,29 @@ package account;
 public class SavingsAccount extends Account{
     private double interestRate;
 
-    public SavingsAccount(String accountNumber, String accountHolder, double balance, CurrencyOptions currency, double interestRate) {
-        super(accountNumber, accountHolder, balance, currency);
+    public SavingsAccount(String accountHolder, double balance, CurrencyOptions currency, double interestRate) {
+        super(accountHolder, balance, currency);
+        //Business rule 1. "The balance of a Savings Account cannot be less than 0."
         if (balance <=0) throw new IllegalArgumentException("Balance cannot be less than 0.");
         if (interestRate < 0) throw new IllegalArgumentException("Interest rate cannot be negative.");
-
         this.interestRate = interestRate;
     }
 
+    @Override
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a depositar debe ser positivo.");
+        }
+        this.balance += amount;
+    }
+
+    @Override
+    public void withdraw(double amount){
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a retirar debe ser positivo.");
+        }
+        this.balance -= amount;
+    }
 
 
     public void applyInterest(int years){
@@ -23,4 +38,6 @@ public class SavingsAccount extends Account{
             throw new IllegalArgumentException("Interest rate cannot be negative.");
         }
     }
+
+
 }

@@ -1,16 +1,38 @@
 package account;
 
-public class CheckingAccount extends Account{
-    private double overtdraftLimit;
+public class CheckingAccount extends Account {
+    private double overdraftLimit; // Corrección en el nombre de la variable
 
-    public CheckingAccount(String accountNumber, String accountHolder, double balance, CurrencyOptions currency, double overtdraftLimit) {
-        super(accountNumber, accountHolder, balance, currency);
-        this.overtdraftLimit = overtdraftLimit;
-        //Allowing the account to have a negative balance up to that limit.
-        if (balance < overtdraftLimit) throw new IllegalArgumentException("Balance cannot up to the overdraft limit for ur account.");
+
+    public CheckingAccount(String accountHolder, double balance, CurrencyOptions currency, double overdraftLimit) {
+        super(accountHolder, balance, currency);
+        this.overdraftLimit = overdraftLimit;
+        // business rule validation
+        if (balance < -overdraftLimit) {
+            throw new IllegalArgumentException("Balance cannot exceed the overdraft limit.");
+        }
+    }
+
+    public double getOverdraftLimit() {
+        return overdraftLimit;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a depositar debe ser positivo.");
+        }
+        this.balance += amount;
+    }
+
+    @Override
+    public void withdraw(double amount){
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a retirar debe ser positivo.");
+        }
+        this.balance -= amount;
     }
 }
-
 
 
 
