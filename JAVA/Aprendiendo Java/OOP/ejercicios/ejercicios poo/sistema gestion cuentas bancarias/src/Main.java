@@ -16,13 +16,19 @@ public class Main {
         CheckingAccount cuentaLaura1 = new CheckingAccount("Luara", 150000, USD, 40000);
         SavingsAccount cuentaFreddy2 = new SavingsAccount("Freddy", 300000, USD, 0.9);
         SavingsAccount cuentaLaura2 = new SavingsAccount("Laura", 250000, USD, 0.8);
+        SavingsAccount cuentaLeydi = new SavingsAccount("leydi", 2000, USD, 1);
+
+
 
         AccountManager accountManager = new AccountManager();
         accountManager.addAccount(cuentaFreddy1);
         accountManager.addAccount(cuentaFreddy2);
         accountManager.addAccount(cuentaLaura1);
         accountManager.addAccount(cuentaLaura2);
+        accountManager.addAccount(cuentaLeydi);
         accountManager.displayAccounts();
+
+        TransactionManager transactionManager = new TransactionManager();
 
 
         while (true) {
@@ -33,18 +39,17 @@ public class Main {
             System.out.println("4. Salir");
             System.out.print("Seleccione una opción: ");
 
-            TransactionManager transactionManager = new TransactionManager();
-
-
             int opcion = scanner.nextInt();
 
+            System.out.println("balance de la cuenta de "+ cuentaFreddy2.getAccountHolder() + ": "+ cuentaFreddy2.getBalance());
+            System.out.println("balance de la cuenta de "+ cuentaLeydi.getAccountHolder() + ": "+ cuentaLeydi.getBalance());
             switch (opcion) {
                 case 1:
                     System.out.print("Ingrese el monto a depositar: ");
                     double deposito = scanner.nextDouble();
                     Transaction depositTransaction = new Transaction(DEPOSIT, deposito, cuentaFreddy2);
                     try {
-                        depositTransaction.deposit(cuentaFreddy2, deposito);
+                        depositTransaction.deposit(cuentaFreddy2);
                         System.out.println("Depósito realizado con éxito.");
                         transactionManager.addTransaction(depositTransaction);
                     } catch (Exception e) {
@@ -55,9 +60,9 @@ public class Main {
                 case 2:
                     System.out.print("Ingrese el monto a retirar: ");
                     double retiro = scanner.nextDouble();
-                    Transaction withdrawTransaction = new Transaction(WITHDRAWAL, retiro, cuentaFreddy1);
+                    Transaction withdrawTransaction = new Transaction(WITHDRAWAL, 20000, cuentaLaura2);
                     try {
-                        withdrawTransaction.withdraw(cuentaFreddy1, retiro);
+                        withdrawTransaction.withdraw(cuentaLaura2, retiro);
                         System.out.println("Retiro realizado con éxito.");
                         transactionManager.addTransaction(withdrawTransaction);
                     } catch (Exception e) {
@@ -68,9 +73,9 @@ public class Main {
                 case 3:
                     System.out.print("Ingrese el monto a transferir: ");
                     double transferencia = scanner.nextDouble();
-                    Transaction transferTransaction = new Transaction(transferencia, cuentaLaura1, cuentaFreddy2, TRANSFER, USD);
+                    Transaction transferTransaction = new Transaction(transferencia, cuentaFreddy2, cuentaLeydi, TRANSFER, USD);
                     try {
-                        transferTransaction.transfer(cuentaLaura1, cuentaFreddy2, transferencia);
+                        transferTransaction.transfer(cuentaFreddy2, cuentaLeydi);
                         System.out.println("Transferencia realizada con éxito.");
                         transactionManager.addTransaction(transferTransaction);
                     } catch (Exception e) {
@@ -88,6 +93,8 @@ public class Main {
             }
 
             transactionManager.displayTransactions();
+            System.out.println("balance de la cuenta de "+ cuentaFreddy2.getAccountHolder() + ": "+ cuentaFreddy2.getBalance());
+            System.out.println("balance de la cuenta de "+ cuentaLeydi.getAccountHolder() + ": "+ cuentaLeydi.getBalance());
 
         }
     }

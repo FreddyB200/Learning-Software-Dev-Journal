@@ -3,8 +3,6 @@ package account;
 public class CheckingAccount extends Account {
     private double overdraftLimit; // Corrección en el nombre de la variable
 
-    // Business rule 2: "The balance of a Checking Account can be negative but must not exceed the overdraft limit."
-
 
     public CheckingAccount(String accountHolder, double balance, CurrencyOptions currency, double overdraftLimit) {
         super(accountHolder, balance, currency);
@@ -29,6 +27,9 @@ public class CheckingAccount extends Account {
 
     @Override
     public void withdraw(double amount){
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a retirar debe ser positivo.");
+        }
         this.balance -= amount;
     }
 }

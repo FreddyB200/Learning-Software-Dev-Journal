@@ -31,11 +31,15 @@ public class TransactionManager {
 
     public Transaction findTransactionByUUID(String uuid) {
         for (Transaction transaction : transactionHistory) {
-            if (transaction.getUuid() == uuid) {
+            if (transaction.getUuid().equals(transactionHistory)) {
                 return transaction;
             }
         }
         return null;
     }
 
+
+    public List<Transaction> getTransactionHistory() {
+        return transactionHistory;
+    }
 }

@@ -1,5 +1,5 @@
 package transaction;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter; // Asegúrate de importar esto
 
 import account.Account;
 import account.CheckingAccount;
@@ -20,6 +20,7 @@ public class Transaction {
 
 
     public Transaction(TransactionType type, double amount, Account sourceAccount) {
+        if (amount <=0) throw new IllegalArgumentException("Invalid Amount");
         this.uuid = UUID.randomUUID().toString();
         this.type = type;
         this.amount = amount;
@@ -54,39 +55,37 @@ public class Transaction {
         return destinationAccount;
     }
 
-    public void setDestinationAccount(Account destinationAccount) {
-        this.destinationAccount = destinationAccount;
-    }
+//    public void setDestinationAccount(Account destinationAccount) {
+//        this.destinationAccount = destinationAccount;
+//    }
 
     public Account getSourceAccount() {
         return sourceAccount;
     }
 
-    public void setSourceAccount(Account sourceAccount) {
-        this.sourceAccount = sourceAccount;
-    }
+//    public void setSourceAccount(Account sourceAccount) {
+//        this.sourceAccount = sourceAccount;
+//    }
 
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount should be positive.");
-        }
-        this.amount = amount;
-    }
+//    public void setAmount(double amount) {
+//        if (amount <= 0) {
+//            throw new IllegalArgumentException("Amount should be positive.");
+//        }
+//        this.amount = amount;
+//    }
 
 
     public void withdraw(Account sourceAccount, double amount) {
         if (this.type != TransactionType.WITHDRAWAL){
             throw new IllegalStateException("No se puede realizar un retiro en una transacción que no es de tipo WITHDRAWAL");
         }
-
         if (!(sourceAccount instanceof CheckingAccount)){
             throw new IllegalArgumentException("Error. Solo se pueden hacer retiros desde una cuenta Checking.");
         }
-
         if (amount <= 0) {
             throw new IllegalArgumentException("Error. The withdraw must be positive.");
         }
@@ -101,7 +100,8 @@ public class Transaction {
     }
 
 
-    public void deposit(Account destinationAccount, double amount) {
+    public void deposit(Account destinationAccount) {
+        double amount = this.amount;
         if (this.type != TransactionType.DEPOSIT) {
             throw new IllegalStateException("No se puede realizar un depósito en una transacción que no es de tipo DEPOSIT");
         }
@@ -119,7 +119,8 @@ public class Transaction {
 
 
 
-    public void transfer(Account sourceAccount, Account destinationAccount, double amount){
+    public void transfer(Account sourceAccount, Account destinationAccount){
+        double amount = this.amount;
         if (type != TransactionType.TRANSFER){
             throw new IllegalStateException("Invalid transaction type. This method is only for transfers.");
         }
@@ -149,19 +150,19 @@ public class Transaction {
         destinationAccount.deposit(amount);
 
         System.out.println("Transfer successful: " + amount + " " + sourceAccount.getCurrency() +
-                " from " + sourceAccount + " to " + destinationAccount);
+                " from " + sourceAccount.getAccountHolder() + " to " + destinationAccount.getAccountHolder());
 
     }
 
     //Show transaction details
     public void displayTransactionDetails() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         System.out.println("Transaction Details:");
         System.out.println("ID: " + (uuid != null ? uuid : "N/A"));
         System.out.println("Type: " + (type != null ? type : "N/A"));
         System.out.println("Amount: " + amount + " " + (currency != null ? currency : "N/A"));
-        System.out.println("Date: " + (timestamp != null ? dateFormat.format(timestamp) : "N/A"));
+        System.out.println("Date: " + (timestamp != null ? timestamp.format(formatter) : "N/A"));
 
         switch (type) {
             case DEPOSIT:
@@ -193,7 +194,7 @@ public class Transaction {
                     System.out.println("Error: Transfers can only occur between accounts with the same currency.");
                     break;
                 }
-                System.out.println("Transfer from " + sourceAccount + " to " + destinationAccount);
+                System.out.println("Transfer from " + sourceAccount.getAccountHolder() + " to " + destinationAccount.getAccountHolder());
                 break;
 
             default:

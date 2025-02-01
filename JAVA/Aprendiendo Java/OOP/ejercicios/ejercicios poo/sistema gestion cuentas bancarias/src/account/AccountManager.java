@@ -29,14 +29,15 @@ public class AccountManager {
 
     public Account findAccountByNumber(String accountNumber) {
         for (Account account : accountStorage) {
-            if (account.getAccountNumber() == accountNumber) {
+            if (account.getAccountNumber().equals(accountNumber)) {
                 return account;
             }
         }
         return null;
     }
 
-
-
-
+    public List<Account> getAccountStorage() {
+        return accountStorage;
+    }
 }
+

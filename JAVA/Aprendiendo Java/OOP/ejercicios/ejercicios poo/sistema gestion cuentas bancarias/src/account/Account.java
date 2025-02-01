@@ -16,18 +16,13 @@ public abstract class  Account {
         this.currency = currency;
     }
 
-    public void addToBalance(double amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("Amount should be positive");
-        }
-        this.balance += amount;
-    }
 
     public double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    protected void setBalance(double balance) {
+        if (balance < 0 ) throw new IllegalArgumentException(("balance cannot be  negative"));
         this.balance = balance;
     }
 

@@ -21,6 +21,9 @@ public class SavingsAccount extends Account{
 
     @Override
     public void withdraw(double amount){
+        if (amount <= 0) {
+            throw new IllegalArgumentException("El monto a retirar debe ser positivo.");
+        }
         this.balance -= amount;
     }
 
