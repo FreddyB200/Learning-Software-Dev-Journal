@@ -7,12 +7,12 @@ public abstract class  Account {
     private final CurrencyOptions currency; //USD, EUR, COP, ETC.
     private String accountNumber;
     private String accountHolder;
-    protected double balance; //current account balance
+    private double balance; //current account balance
 
-    public Account(String accountHolder, double balance, CurrencyOptions currency) {
+    public Account(String accountHolder, CurrencyOptions currency) {
         this.accountNumber = UUID.randomUUID().toString();
         this.accountHolder = accountHolder;
-        this.balance = balance;
+        this.balance = 0;
         this.currency = currency;
     }
 
@@ -38,17 +38,14 @@ public abstract class  Account {
         return accountHolder;
     }
 
-    public void setAccountHolder(String accountHolder) {
-        this.accountHolder = accountHolder;
+    protected abstract void withdraw(double amount);
+
+    public void deposit(double amount){
+        if (amount <= 0){
+            throw new IllegalArgumentException("Deposit amount must be positive.");
+        }
+        balance += amount;
     }
 
-    public String checkBalance() {
-        return "The current balance is: " + balance;
-    }
-
-
-    public abstract void deposit(double amount);
-
-    public abstract void withdraw(double amount);
 
 }
