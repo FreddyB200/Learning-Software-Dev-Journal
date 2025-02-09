@@ -20,10 +20,11 @@ public class AccountManager {
             System.out.println("No accounts storaged yet.");
             return;
         }
-        System.out.println("-----Accounts Storaged!-----");
         for (Account account : accountStorage){
-            System.out.println("Account holder: " + account.getAccountHolder());
+
             System.out.println("-------------------");
+            System.out.println("Account: " + account.getAccountNumber() + ", Account holder: " + account.getAccountHolder());
+
         }
     }
 
