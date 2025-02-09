@@ -22,10 +22,11 @@ public class TransactionManager {
             System.out.println("No transactions registered in history");
             return;
         }
-        System.out.println("-----Transactions history!-----");
         for (Transaction transaction : transactionHistory){
-            transaction.displayTransactionDetails();
+
             System.out.println("-------------------");
+            transaction.displayTransactionDetails();
+
         }
     }
 

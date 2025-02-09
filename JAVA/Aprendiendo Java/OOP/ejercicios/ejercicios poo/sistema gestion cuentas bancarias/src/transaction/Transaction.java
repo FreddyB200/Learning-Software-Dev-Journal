@@ -4,7 +4,6 @@ import account.Account;
 import account.CurrencyOptions;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Transaction {
