@@ -38,7 +38,7 @@ public abstract class  Account {
         return accountHolder;
     }
 
-    protected abstract void withdraw(double amount);
+    public abstract void withdraw(double amount);
 
     public void deposit(double amount){
         if (amount <= 0){
