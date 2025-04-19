@@ -1,4 +1,4 @@
- # 💻 Software Development Fundamentals Lab 
+# 💻 Software Development Fundamentals Lab 
 
 **Structured learning repository | Core programming concepts & language mastery**  
 *(Focus: Java | Python | Go | Algorithms | System Design Basics)*  
@@ -19,52 +19,79 @@ This repo serves as my:
 
 # 🖥️ Code Lab - Core Programming Skills
 
-**Estructura minimalista para practicar fundamentos puros**
+**Actual project structure:**
 
 ```bash
-core-skills/
-├── java/
-│   ├── oop/                  
-│   ├── data-structures/      
-│   └── algorithms/           
-
-├── python/
-│   ├── functional/           
-│   └── patterns/             
-
-├── go/
-│   ├── basics/               
-│   │   ├── variables.go
-│   │   └── pointers.go
-│   │
-│   ├── concurrency/        
-│   │   ├── goroutines.go
-│   │   └── channels.go
-│   │
-│   └── patterns/             
-│       ├── singleton.go
-│       └── factory.go
-
-├── devops/
-│   ├── docker/               
-│   │   ├── Dockerfile.example
-│   │   └── docker-compose.yml
-│   │
-│   ├── bash-scripting/       
-│   │   ├── backup.sh
-│   │   └── setup_env.sh
-│   │
-│   ├── ci-cd/                 # conceptos y pruebas con GitHub Actions o GitLab CI
-│   │   └── github-actions-demo.yml
-│   │
-│   └── k8s-basics/            # para practicar YAML, pods, servicios, etc.
-│       ├── pod.yaml
-│       └── deployment.yaml
-
-├── exercises/              
-│   ├── advent-of-code/      
-│   └── leetcode/
-
+1_language_core/
+    go/
+    java/
+        Roadmap JAVA.pdf
+        learning-java/
+            concurrency/
+            data-structure/
+            fundamentals/
+            jvm-internals/
+            oop/
+            streams/
+    python/
+2_algorithms/
+    leetcode/
+    pattern-recognition/
+    searching-sorting/
+3_exercises/
+    codewars/
+    hakerrank/
+4_mini_projects/
+    cli-tools/
+    concept-demos/
+        mvc-demo/
+        observer-pattern/
+5_resources/
+    book-notes/
+    cheatsheets/
+6_daily-log/
+JAVA-ARCHIVED/
+    Roadmap JAVA.pdf
+    Aprendiendo Java/
+        DataStructure/
+            data structure.iml
+            data structure course/
+                data structure course.iml
+                src/
+                    arrayLists/
+                    basics/
+        OOP/
+            Clases-metodos-abstractos/
+                Clases-metodos-abstractos.iml
+                src/
+                    clases/
+            ejercicios/
+                ejercicios poo/
+                    ejercicios poo.iml
+                    Facturas/
+                    ...
+                Ejercicios-logica/
+            Interfaces y excepciones/
+                Interfaces y excepciones.iml
+                src/
+            polimorfismo/
+                polimorfismo.iml
+                src/
+        Understanding The Basics/
+            FirstProgramanInt.iml
+            notas.md
+            src/
+                Basics.java
+                arrays/
+                control_structures/
+                logic/
+                math/
+                methods/
+                strings/
+    Libros Y Material/
+    Notas/
+backend roadmap.jpg
+README.md
 ```
 
 ## Topics Covered:
