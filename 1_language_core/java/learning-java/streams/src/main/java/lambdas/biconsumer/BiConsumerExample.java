@@ -13,5 +13,9 @@ public class BiConsumerExample {
         BiConsumer<String, String> biConsumer = (a, b) -> System.out.println(a + " " + b);
 
         biConsumer.accept("hola", "mundo");
+
+        BiConsumer<Integer, Integer> intBiConsumer = (Integer a, Integer b) -> System.out.println(a + b);
+
+        intBiConsumer.accept(5, 9);
     }
 }
