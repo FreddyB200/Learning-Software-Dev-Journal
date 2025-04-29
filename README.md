@@ -130,4 +130,4 @@ def binary_search(arr, target):
 
 
 
-> "The expert in anything was once a beginner." — Let's grow together! 🚀
+> "The expert in anything was once a beginner." — Lets grow together! 🚀
